@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Orbit : MonoBehaviour
 {
+    public Vector3 orbitCenter;
     public Vector3 orbitVector;
     public float speed;
 
