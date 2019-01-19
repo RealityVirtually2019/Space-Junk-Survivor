@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public ObjectPool pool;
     public Transform junkTarget;
+    public float junkTargetVariance;
     public float orbitTime;
     public float invincibilityTime;
     public float junkSpeed;
@@ -46,29 +47,20 @@ public class GameManager : MonoBehaviour
         float minZ = spawnAreaCenter.z - spawnArea.bounds.extents.z;
         float maxZ = spawnAreaCenter.z + spawnArea.bounds.extents.z;
 
-        //print("minX: " + minX);
-        //print("maxX: " + maxX);
-        //print("minY: " + minY);
-        //print("maxY: " + maxY);
-        //print("minZ: " + minZ);
-        //print("maxZ: " + maxZ);
-
-
-        Vector3 nextSpawnLocation; // = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
+        Vector3 nextSpawnLocation;
+        Vector3 realTargetLocation = junkTarget.position;
+        Vector3 nextTargetLocation;
         for (int i = 0; i < 30; i++)
         {
             nextSpawnLocation = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
             print("Spawning cube " + i + " at " + nextSpawnLocation);
             Interactable junk = pool.GetFromPool();
             junk.transform.position = nextSpawnLocation;
-            //junk.rigidbody.position = nextSpawnLocation;
 
-            //junk.rigidbody.velocity = Vector3.zero;
-            //junk.rigidbody.angularVelocity = Vector3.zero;
-
-            //junk.rigidbody.isKinematic = false;
-            junk.transform.LookAt(junkTarget);
-            //junk.rigidbody.velocity = new Vector3(0f, 0f, -3f);
+            // X and Y will vary by 0.7 in either direction
+            nextTargetLocation = realTargetLocation + new Vector3(Random.Range(-junkTargetVariance, junkTargetVariance), Random.Range(-junkTargetVariance, junkTargetVariance), 0f);
+            //junk.transform.LookAt(junkTarget);
+            junk.transform.LookAt(nextTargetLocation);
             junk.rigidbody.AddForce(junk.transform.forward * junkSpeed);
             //junk.rigidbody.AddRelativeForce(transform.forward * junkSpeed);
             junk.rigidbody.angularVelocity = new Vector3(Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity));
