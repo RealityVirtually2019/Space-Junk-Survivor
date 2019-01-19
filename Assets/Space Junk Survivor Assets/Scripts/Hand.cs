@@ -66,7 +66,7 @@ public class Hand : MonoBehaviour
             m_CurrentInteractable.m_ActiveHand.Drop();
         }
 
-        m_CurrentInteractable.transform.position = transform.position;
+        //m_CurrentInteractable.transform.position = transform.position;
 
         Rigidbody targetBody = m_CurrentInteractable.GetComponent<Rigidbody>();
         m_Joint.connectedBody = targetBody;

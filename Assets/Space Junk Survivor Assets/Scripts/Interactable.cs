@@ -7,4 +7,11 @@ public class Interactable : MonoBehaviour
 {
     public Hand m_ActiveHand = null;
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (m_ActiveHand && other.gameObject.CompareTag("Wieldable"))
+        {
+            Destroy(other.gameObject);
+        }
+    }
 }
