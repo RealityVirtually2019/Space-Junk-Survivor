@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2399344180396007183}
   - component: {fileID: 2399344180396007182}
+  - component: {fileID: 4096732294007770291}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -45,3 +46,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orbitTime: 45
   invincibilityTime: 0.25
+--- !u!114 &4096732294007770291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2399344180396007180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fe004952e2e3a439257f30b07c6d13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

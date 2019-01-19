@@ -18,13 +18,15 @@ public class Interactable : MonoBehaviour
     {
         if (attachedHand && other.gameObject.CompareTag("Wieldable"))
         {
+            print(gameObject.name + " just got hit");
             other.gameObject.GetComponent<Interactable>().Hit();
         }
         else if (other.gameObject.CompareTag("Boundary"))
         {
             if (other.gameObject.name.Equals("Top Boundary") || other.gameObject.name.Equals("Bottom Boundary"))
             {
-                other.gameObject.SetActive(false);
+                //gameObject.SetActive(false);
+                Hit();
             }
             else if (other.gameObject.name.Equals("Back Boundary"))
             {
@@ -33,6 +35,8 @@ public class Interactable : MonoBehaviour
             else if (other.gameObject.name.Equals("Left Boundary"))
             {
                 // Wait and respawn on the right
+                //Vector3 initialPosition = transform.position;
+                
             }
             else if (other.gameObject.name.Equals("Right Boundary"))
             {
@@ -72,7 +76,7 @@ public class Interactable : MonoBehaviour
     IEnumerator WaitToTurnOnColliders()
     {
         //GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(-0.5f, 0.5f), 0f, -1f);
-        rigidbody.velocity = new Vector3(Random.Range(-0.5f, 0.5f), 0f, -1f);
+        //rigidbody.velocity = new Vector3(Random.Range(-0.5f, 0.5f), 0f, -1f);
 
         yield return new WaitForSeconds(GameManager.instance.invincibilityTime);
 
