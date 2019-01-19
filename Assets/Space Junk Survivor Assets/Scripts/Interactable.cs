@@ -26,12 +26,42 @@ public class Interactable : MonoBehaviour
             foreach (Transform t in pieces)
             {
                 t.gameObject.SetActive(true);
-                t.GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+                t.gameObject.GetComponent<Interactable>().Activate();
+                //StartCoroutine("WaitToTurnOnColliders");
+                //t.GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
             }
         }
         else
         {
             gameObject.SetActive(false);
         }
+    }
+
+    public void Activate()
+    {
+        StartCoroutine("WaitToTurnOnColliders");
+    }
+
+    IEnumerator WaitToTurnOnColliders()
+    {
+        //yield return new WaitForSeconds(0.25f);
+
+        GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(-0.5f, 0.5f), 0f, -1f);
+
+        //foreach (Transform t in pieces)
+        //{
+            //t.gameObject.SetActive(true);
+            //t.GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            //t.GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(-0.5f, 0.5f), 0f, -1f);
+        //}
+
+        yield return new WaitForSeconds(0.25f);
+
+        GetComponent<BoxCollider>().enabled = true;
+
+        //foreach (Transform t in pieces)
+        //{
+        //    t.GetComponent<BoxCollider>().enabled = true;
+        //}
     }
 }
