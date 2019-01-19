@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Boundary { Front, Back, Left, Right }
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
@@ -13,6 +15,7 @@ public class GameManager : MonoBehaviour
     public float junkSpeed;
     public float junkRotationIntensity;
 
+    public Transform frontBoundary;
     public BoxCollider spawnArea;
 
     void Awake()
@@ -65,6 +68,26 @@ public class GameManager : MonoBehaviour
             //junk.rigidbody.AddRelativeForce(transform.forward * junkSpeed);
             junk.rigidbody.angularVelocity = new Vector3(Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity));
         }
+    }
+
+    public Vector3 GetRecycleLocation(Boundary boundary, Vector3 currentLocation)
+    {
+        if (boundary == Boundary.Back)
+        {
+            return new Vector3(-currentLocation.x, currentLocation.y, frontBoundary.position.z);
+        }
+        else
+        {
+            print("Unknown barrier hit");
+            return Vector3.zero;
+        }
+    }
+
+    public void SendJunkAtTarget(Interactable interactable)
+    {
+        Vector3 targetLocation = junkTarget.position + new Vector3(Random.Range(-junkTargetVariance, junkTargetVariance), Random.Range(-junkTargetVariance, junkTargetVariance), 0f);
+        interactable.gameObject.transform.LookAt(targetLocation);
+        interactable.rigidbody.AddForce(interactable.gameObject.transform.forward * junkSpeed);
     }
 
 }

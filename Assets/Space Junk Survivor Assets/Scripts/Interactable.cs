@@ -8,7 +8,7 @@ public class Interactable : MonoBehaviour
     public Hand attachedHand;
     public bool partOfLargerObject;
     public bool canShatter;
-    public Vector3 currentVelocity;
+    //public Vector3 currentVelocity;
     public Rigidbody rigidbody;
     public BoxCollider collider;
     //public Transform intact; // Will instance always just be the object the script is attached to?
@@ -25,12 +25,14 @@ public class Interactable : MonoBehaviour
         {
             if (other.gameObject.name.Equals("Top Boundary") || other.gameObject.name.Equals("Bottom Boundary"))
             {
-                //gameObject.SetActive(false);
-                Hit();
+                gameObject.SetActive(false);
+                //Hit();
             }
             else if (other.gameObject.name.Equals("Back Boundary"))
             {
                 // Wait and respawn in front
+                Vector3 newPos = GameManager.instance.GetRecycleLocation(Boundary.Back, transform.position);
+                StartCoroutine(HoldUntilOrbited(newPos));
             }
             else if (other.gameObject.name.Equals("Left Boundary"))
             {
@@ -45,9 +47,17 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    IEnumerator HoldUntilOrbited()
+    IEnumerator HoldUntilOrbited(Vector3 newPos)
     {
-        yield return new WaitForSeconds(GameManager.instance.orbitTime);
+        //Vector3 savedVelocity = rigidbody.velocity;
+        rigidbody.velocity = Vector3.zero;
+        //yield return new WaitForSeconds(GameManager.instance.orbitTime);
+        yield return null;
+
+        transform.position = newPos;
+        GameManager.instance.SendJunkAtTarget(this);
+        //rigidbody.velocity = savedVelocity;
+        //transform.LookAt(GameManager.instance.GetJunkTarget());
     }
 
     public void Hit()
