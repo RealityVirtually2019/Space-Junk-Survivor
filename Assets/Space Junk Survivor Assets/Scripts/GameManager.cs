@@ -6,8 +6,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public ObjectPool pool;
+    public Transform junkTarget;
     public float orbitTime;
     public float invincibilityTime;
+    public float junkSpeed;
+    public float junkRotationIntensity;
 
     public BoxCollider spawnArea;
 
@@ -57,16 +60,18 @@ public class GameManager : MonoBehaviour
             nextSpawnLocation = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
             print("Spawning cube " + i + " at " + nextSpawnLocation);
             Interactable junk = pool.GetFromPool();
-            //junk.transform.position = nextSpawnLocation;
-            junk.rigidbody.position = nextSpawnLocation;
+            junk.transform.position = nextSpawnLocation;
+            //junk.rigidbody.position = nextSpawnLocation;
 
             //junk.rigidbody.velocity = Vector3.zero;
             //junk.rigidbody.angularVelocity = Vector3.zero;
 
-            junk.rigidbody.isKinematic = false;
-            junk.transform.LookAt(Vector3.zero);
-            //junk.rigidbody.velocity = new Vector3(-1f, 0f, 0f);
-            //junk.rigidbody.angularVelocity = new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f));
+            //junk.rigidbody.isKinematic = false;
+            junk.transform.LookAt(junkTarget);
+            //junk.rigidbody.velocity = new Vector3(0f, 0f, -3f);
+            junk.rigidbody.AddForce(junk.transform.forward * junkSpeed);
+            //junk.rigidbody.AddRelativeForce(transform.forward * junkSpeed);
+            junk.rigidbody.angularVelocity = new Vector3(Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity));
         }
     }
 
