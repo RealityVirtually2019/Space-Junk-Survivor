@@ -5,29 +5,27 @@ using Valve.VR;
 
 public class Hand : MonoBehaviour
 {
-    public SteamVR_Action_Boolean m_GrabAction = null;
-    public SteamVR_Behaviour_Pose m_Pose = null;
-    public FixedJoint m_Joint = null;
-    private Interactable m_CurrentInteractable = null;
-    private List<Interactable> m_ContactInteractables = new List<Interactable>();
+    public SteamVR_Action_Boolean grabActon = null;
+    public SteamVR_Behaviour_Pose pose = null;
+    public FixedJoint joint = null;
+    private Interactable currentInteractable = null;
+    private List<Interactable> possibleInteractables = new List<Interactable>();
 
     private void Awake()
     {
-        m_Pose = GetComponent<SteamVR_Behaviour_Pose>();
-        m_Joint = GetComponent<FixedJoint>();
+        pose = GetComponent<SteamVR_Behaviour_Pose>();
+        joint = GetComponent<FixedJoint>();
     }
 
     private void Update()
     {
-       if(m_GrabAction.GetStateDown(m_Pose.inputSource))
+        if(grabActon.GetStateDown(pose.inputSource))
         {
-            print(gameObject.name + "trigger down");
             Pickup();
         }
 
-        if (m_GrabAction.GetStateUp(m_Pose.inputSource))
+        if (grabActon.GetStateUp(pose.inputSource))
         {
-            print(gameObject.name + "trigger down");
             Drop();
         }
     }
@@ -39,7 +37,7 @@ public class Hand : MonoBehaviour
             return;
         }
 
-        m_ContactInteractables.Add(other.gameObject.GetComponent<Interactable>());
+        possibleInteractables.Add(other.gameObject.GetComponent<Interactable>());
     }
 
     private void OnTriggerExit(Collider other)
@@ -49,46 +47,46 @@ public class Hand : MonoBehaviour
             return;
         }
 
-        m_ContactInteractables.Remove(other.gameObject.GetComponent<Interactable>());
+        possibleInteractables.Remove(other.gameObject.GetComponent<Interactable>());
     }
 
     public void Pickup()
     {
-        m_CurrentInteractable = GetNearestInteractable();
+        currentInteractable = GetNearestInteractable();
 
-        if (!m_CurrentInteractable)
+        if (!currentInteractable)
         {
             return;
         }
 
-        if (m_CurrentInteractable.m_ActiveHand)
+        if (currentInteractable.attachedHand)
         {
-            m_CurrentInteractable.m_ActiveHand.Drop();
+            currentInteractable.attachedHand.Drop();
         }
 
         //m_CurrentInteractable.transform.position = transform.position;
 
-        Rigidbody targetBody = m_CurrentInteractable.GetComponent<Rigidbody>();
-        m_Joint.connectedBody = targetBody;
+        Rigidbody targetBody = currentInteractable.GetComponent<Rigidbody>();
+        joint.connectedBody = targetBody;
 
-        m_CurrentInteractable.m_ActiveHand = this;
+        currentInteractable.attachedHand = this;
     }
 
     public void Drop()
     {
-        if (!m_CurrentInteractable)
+        if (!currentInteractable)
         {
             return;
         }
 
-        Rigidbody targetBody = m_CurrentInteractable.GetComponent<Rigidbody>();
-        targetBody.velocity = m_Pose.GetVelocity();
-        targetBody.angularVelocity = m_Pose.GetAngularVelocity();
+        Rigidbody targetBody = currentInteractable.GetComponent<Rigidbody>();
+        targetBody.velocity = pose.GetVelocity();
+        targetBody.angularVelocity = pose.GetAngularVelocity();
 
-        m_Joint.connectedBody = null;
+        joint.connectedBody = null;
 
-        m_CurrentInteractable.m_ActiveHand = null;
-        m_CurrentInteractable = null;
+        currentInteractable.attachedHand = null;
+        currentInteractable = null;
     }
 
     private Interactable GetNearestInteractable()
@@ -97,7 +95,7 @@ public class Hand : MonoBehaviour
         float minDistance = float.MaxValue;
         float distance = 0f;
 
-        foreach (Interactable interactable in m_ContactInteractables)
+        foreach (Interactable interactable in possibleInteractables)
         {
             distance = (interactable.transform.position - transform.position).sqrMagnitude;
             if (distance < minDistance)
