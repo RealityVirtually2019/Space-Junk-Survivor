@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public ObjectPool pool;
     public Transform junkTarget;
+    public int startingJunkCount;
     public float junkTargetVariance;
     public float orbitTime;
     public float invincibilityTime;
@@ -53,7 +54,7 @@ public class GameManager : MonoBehaviour
         Vector3 nextSpawnLocation;
         Vector3 realTargetLocation = junkTarget.position;
         Vector3 nextTargetLocation;
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < startingJunkCount; i++)
         {
             nextSpawnLocation = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
             print("Spawning cube " + i + " at " + nextSpawnLocation);
@@ -74,7 +75,7 @@ public class GameManager : MonoBehaviour
     {
         if (boundary == Boundary.Back)
         {
-            return new Vector3(-currentLocation.x, currentLocation.y, frontBoundary.position.z);
+            return new Vector3(-currentLocation.x * 6f, currentLocation.y * 6f, frontBoundary.position.z);
         }
         else
         {

@@ -44,8 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c45b3c50edc1ca47ba83f12146c60eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pool: {fileID: 4096732294007770291}
+  junkTarget: {fileID: 0}
+  startingJunkCount: 30
+  junkTargetVariance: 0.7
   orbitTime: 45
   invincibilityTime: 0.25
+  junkSpeed: 800
+  junkRotationIntensity: 0.25
+  frontBoundary: {fileID: 0}
+  spawnArea: {fileID: 0}
 --- !u!114 &4096732294007770291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,3 +66,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0fe004952e2e3a439257f30b07c6d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectToPool: {fileID: 3818646225682029737, guid: 1ba265fdb68437e4c88015f3f769f21f,
+    type: 3}
+  amountToPool: 50
