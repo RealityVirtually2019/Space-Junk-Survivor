@@ -1,0 +1,140 @@
+fileFormatVersion: 2
+guid: 8781dbc81edef6946b00881b2a370548
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: shut.layer
+    400000: //RootNode
+    400002: shut.layer
+    2100000: OMS pod prt
+    2100002: OMS pod prt back
+    2100004: OMS pod stb
+    2100006: OMS pod stb back
+    2100008: OMS pods side
+    2100010: RCS aft prt
+    2100012: RCS aft stb
+    2100014: arrows top
+    2100016: bay prt doorlatc
+    2100018: bay prt edges
+    2100020: bay prt evarail
+    2100022: bay prt wedges
+    2100024: bay stb doorlatc
+    2100026: bay stb edges
+    2100028: bay stb evarail
+    2100030: bay stb wedges
+    2100032: belly
+    2100034: belly flap
+    2100036: cockpit side
+    2100038: fusolage aft eng
+    2100040: fusolage aft fla
+    2100042: nose tip
+    2100044: nose top
+    2100046: shut-bay
+    2100048: shut-bay-aft
+    2100050: shut-bay-fwd
+    2100052: shut-bay-win-ins
+    2100054: shut-bay-win-out
+    2100056: shut-bay-win-sid
+    2100058: shut-cam-cargo
+    2100060: shut-cam-cargo-l
+    2100062: shut-glass
+    2100064: shut-handrails
+    2100066: side prt
+    2100068: side stb
+    2100070: tail
+    2100072: wing flap top
+    2100074: wingtop
+    2100076: winodws top blac
+    2100078: winodws top whit
+    2100080: winodws top whi1
+    2100082: winodws top whi2
+    2300000: shut.layer
+    3300000: shut.layer
+    4300000: shut.layer
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

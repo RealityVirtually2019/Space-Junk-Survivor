@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < startingJunkCount; i++)
         {
             nextSpawnLocation = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
-            print("Spawning cube " + i + " at " + nextSpawnLocation);
+            //print("Spawning cube " + i + " at " + nextSpawnLocation);
             Interactable junk = pool.GetFromPool();
             junk.transform.position = nextSpawnLocation;
 

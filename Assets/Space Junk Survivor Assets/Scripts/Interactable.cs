@@ -18,7 +18,7 @@ public class Interactable : MonoBehaviour
     {
         if (attachedHand && other.gameObject.CompareTag("Wieldable"))
         {
-            print(gameObject.name + " just got hit");
+            print(other.gameObject.name + " just got hit");
             other.gameObject.GetComponent<Interactable>().Hit();
         }
         else if (other.gameObject.CompareTag("Boundary"))

@@ -14,7 +14,7 @@ public class ObjectPool : MonoBehaviour
 
         for (int i = 0; i < amountToPool; i++)
         {
-            pool.Add(Instantiate(objectToPool).GetComponent<Interactable>());
+            pool.Add(Instantiate(objectToPool).transform.GetChild(0).GetComponent<Interactable>());
             pool[i].gameObject.SetActive(false);
         }
     }
@@ -30,7 +30,7 @@ public class ObjectPool : MonoBehaviour
             }
         }
 
-        Interactable newObject = Instantiate(objectToPool).GetComponent<Interactable>();
+        Interactable newObject = Instantiate(objectToPool).transform.GetChild(0).GetComponent<Interactable>();
         pool.Add(newObject);
         return newObject;
     }
