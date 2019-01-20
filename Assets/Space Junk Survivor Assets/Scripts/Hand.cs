@@ -34,7 +34,7 @@ public class Hand : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Wieldable"))
+        if (!other.CompareTag("Wieldable") && !other.CompareTag("Weapon"))
         {
             return;
         }
@@ -44,7 +44,7 @@ public class Hand : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.CompareTag("Wieldable"))
+        if (!other.CompareTag("Wieldable") && !other.CompareTag("Weapon"))
         {
             return;
         }

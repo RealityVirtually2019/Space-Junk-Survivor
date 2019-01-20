@@ -8,6 +8,7 @@ TagManager:
   - FxTemporaire
   - Wieldable
   - Boundary
+  - Weapon
   layers:
   - Default
   - TransparentFX
