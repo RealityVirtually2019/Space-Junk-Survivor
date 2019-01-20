@@ -72,6 +72,7 @@ public class Hand : MonoBehaviour
         joint.connectedBody = targetBody;
 
         currentInteractable.attachedHand = this;
+        print("Picked up " + currentInteractable.gameObject.name);
     }
 
     public void Drop()

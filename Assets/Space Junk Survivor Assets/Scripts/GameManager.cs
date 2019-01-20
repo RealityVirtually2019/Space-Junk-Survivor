@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
         Vector3 targetLocation = junkTarget.position + new Vector3(Random.Range(-junkTargetVariance, junkTargetVariance), Random.Range(-junkTargetVariance, junkTargetVariance), 0f);
         interactable.gameObject.transform.LookAt(targetLocation);
         interactable.rigidbody.AddForce(interactable.gameObject.transform.forward * junkSpeed);
+        interactable.rigidbody.angularVelocity = new Vector3(Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity));
     }
 
 }
