@@ -5,8 +5,10 @@ using Valve.VR;
 
 public class Hand : MonoBehaviour
 {
+    public SteamVR_Input_Sources inputSource;
     public SteamVR_Action_Boolean grabActon = null;
     public SteamVR_Behaviour_Pose pose = null;
+    public SteamVR_Action_Vibration vibration = null;
     public FixedJoint joint = null;
     private Interactable currentInteractable = null;
     private List<Interactable> possibleInteractables = new List<Interactable>();
@@ -106,6 +108,11 @@ public class Hand : MonoBehaviour
         }
 
         return nearest;
+    }
+
+    public void TriggerVibration()
+    {
+        vibration.Execute(0f, 0.25f, 40f, 1f, inputSource);
     }
 
 }

@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public ObjectPool pool;
     public Transform junkTarget;
+    public float delayTime;
     public int startingJunkCount;
     public float junkTargetVariance;
     public float orbitTime;
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Start()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(delayTime);
         LoadLevel();
     }
 

@@ -8,7 +8,9 @@ public class Interactable : MonoBehaviour
     public Hand attachedHand;
     public bool partOfLargerObject;
     public bool canShatter;
+    public float velocityMultiplier;
     //public Vector3 currentVelocity;
+    public MeshRenderer renderer;
     public Rigidbody rigidbody;
     public BoxCollider collider;
     //public Transform intact; // Will instance always just be the object the script is attached to?
@@ -19,7 +21,8 @@ public class Interactable : MonoBehaviour
         if (attachedHand && other.gameObject.CompareTag("Wieldable"))
         {
             print(other.gameObject.name + " just got hit");
-            other.gameObject.GetComponent<Interactable>().Hit();
+            attachedHand.TriggerVibration();
+            other.gameObject.GetComponent<Interactable>().Hit(this);
         }
         else if (other.gameObject.CompareTag("Boundary"))
         {
@@ -60,16 +63,47 @@ public class Interactable : MonoBehaviour
         //transform.LookAt(GameManager.instance.GetJunkTarget());
     }
 
-    public void Hit()
+    public void Hit(Interactable hittingBody)
     {
         if (canShatter)
         {
             //intact.gameObject.SetActive(false);
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
+            renderer.enabled = false;
+            collider.enabled = false;
+            //print(gameObject.name + "'s velocity was: " + rigidbody.velocity);
+            //print("And the object that hit it had velocity: " + hittingBody.velocity);
+            Vector3 oldVelocity = rigidbody.velocity;
+            rigidbody.velocity = Vector3.zero;
+            Vector3 newVelocity;
+            if (hittingBody.attachedHand)
+            {
+                // Get velocity from hand
+                //if (attachedHand != null)
+                //{
+                //    print("Successfully found hand");
+                //}
+                //if (attachedHand.pose != null)
+                //{
+                //    print("Successfully found pose");
+                //}
+                //if (attachedHand.pose.GetVelocity() != null)
+                //{
+                //    print("Successfully found velocity");
+                //}
+                newVelocity = hittingBody.attachedHand.pose.GetVelocity();
+            }
+            else
+            {
+                // Get velocity from object
+                newVelocity = hittingBody.rigidbody.velocity;
+            }
+            newVelocity *= hittingBody.velocityMultiplier;
+
             foreach (Transform t in pieces)
             {
                 t.gameObject.SetActive(true);
-                t.gameObject.GetComponent<Interactable>().Activate();
+                t.gameObject.GetComponent<Interactable>().Activate(oldVelocity, newVelocity);
             }
         }
         else
@@ -78,15 +112,22 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    public void Activate()
+    public void Activate(Vector3 parentVelocity, Vector3 newVelocity)
     {
+        //rigidbody.velocity = new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), -6f) - hittingBody.velocity;
+        //rigidbody.velocity = -hittingBody.velocity;
+        print("Velocity of object hit was: " + parentVelocity);
+        print("Velocity of wrench was: " + newVelocity);
+        //rigidbody.velocity = parentVelocity + newVelocity;
+        rigidbody.velocity = new Vector3(parentVelocity.x + (newVelocity.x * Random.Range(0.4f, 0.8f)), parentVelocity.y + (newVelocity.y * Random.Range(0.4f, 0.8f)), parentVelocity.z + velocityMultiplier);
+        //rigidbody.AddForce(newVelocity);
         StartCoroutine("WaitToTurnOnColliders");
     }
 
     IEnumerator WaitToTurnOnColliders()
     {
         //GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(-0.5f, 0.5f), 0f, -1f);
-        //rigidbody.velocity = new Vector3(Random.Range(-0.5f, 0.5f), 0f, -1f);
+        //rigidbody.velocity = new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), -6f);
 
         yield return new WaitForSeconds(GameManager.instance.invincibilityTime);
 
