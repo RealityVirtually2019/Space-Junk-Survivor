@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Boundary { Front, Back, Left, Right }
+public enum Boundary { Top, Bottom, Front, Back, Left, Right }
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public static List<Interactable> currentInteractables;
     private float levelNumber;
+
     public float initialWaveTime;
     public float waveTimeIncrease;
+
     public float initialSpawnDelay;
     public float spawnDelayDecrease;
+
     public float defaultLevelDowntime;
+
+    private bool debrisStillSpawning;
     private bool playerIsAlive;
     public ObjectPool pool;
     public List<Interactable> debrisInCurrentLevel;
@@ -94,12 +99,16 @@ public class GameManager : MonoBehaviour
     // TODO: Decide if we want to increase debris speed or spawning area by level
     IEnumerator RunGame()
     {
-        float levelTimeElapsed = 0f;
+        //float levelTimeElapsed; // = 0f;
         float levelDuration = initialWaveTime;
         float debrisDelay = initialSpawnDelay;
         while (playerIsAlive)
         {
+            print("Starting level " + levelNumber);
+            print("Debris will spawn for " + levelDuration + " seconds at a rate of one every " + debrisDelay + " seconds.");
+            float levelTimeElapsed = 0f;
             float timeSinceDebrisSpawned = debrisDelay;
+            debrisStillSpawning = true;
             while (levelTimeElapsed < levelDuration)
             {
                 if (timeSinceDebrisSpawned >= debrisDelay)
@@ -117,24 +126,105 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
             // Before ending level, wait for all currently spawned debris to pass player
+            debrisStillSpawning = false;
 
+            while (debrisInCurrentLevel.Count > 0)
+            {
+                print(debrisInCurrentLevel.Count + " pieces of debris remaining");
+                yield return null;
+            }
 
             // Increase difficulty for next wave
             levelNumber++;
             levelDuration += waveTimeIncrease;
-            debrisDelay -= spawnDelayDecrease;
+            //debrisDelay -= spawnDelayDecrease;
+            debrisDelay -= debrisDelay * spawnDelayDecrease;
 
             // Return all debris to pool
-            foreach (Interactable debris in debrisInCurrentLevel)
-            {
-                pool.ReturnToPool(debris);
-            }
-            debrisInCurrentLevel = new List<Interactable>();
+            //foreach (Interactable debris in debrisInCurrentLevel)
+            //{
+            //    pool.ReturnToPool(debris);
+            //}
+            //debrisInCurrentLevel = new List<Interactable>();
 
             // Check if there's anything that should be done before starting the next level (spawning a weapon, showing tutorial text)
 
             // Wait a few seconds before starting next level
             yield return new WaitForSeconds(defaultLevelDowntime);
+        }
+    }
+
+    public void HitBoundary(Interactable debris, Boundary boundary)
+    {
+        if (boundary == Boundary.Top || boundary == Boundary.Bottom || boundary == Boundary.Front)
+        {
+            // Return to pool
+            if (debris.parentDebris != null)
+            {
+                bool allChildrenDestroyed = true;
+                for (int i = 0; i < 4; i++)
+                {
+                    if (debris.parentDebris.pieces[i].beenDestroyed == false)
+                    {
+                        allChildrenDestroyed = false;
+                    }
+
+                    if (allChildrenDestroyed)
+                    {
+                        pool.ReturnToPool(debris.parentDebris);
+                        debrisInCurrentLevel.Remove(debris.parentDebris);
+                    }
+                    else
+                    {
+                        debris.KillByBarrier();
+                    }
+                }
+            }
+            else
+            {
+                pool.ReturnToPool(debris);
+                debrisInCurrentLevel.Remove(debris);
+            }
+        }
+        else if (boundary == Boundary.Back || boundary == Boundary.Left || boundary == Boundary.Right)
+        {
+            if (debrisStillSpawning)
+            {
+                // Recycle to front
+                Vector3 spawnLocation = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
+                debris.transform.position = spawnLocation;
+                SendDebrisAtTarget(debris);
+            }
+            else
+            {
+                // Return to pool
+                if (debris.parentDebris != null)
+                {
+                    bool allChildrenDestroyed = true;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (debris.parentDebris.pieces[i].beenDestroyed == false)
+                        {
+                            allChildrenDestroyed = false;
+                        }
+
+                        if (allChildrenDestroyed)
+                        {
+                            pool.ReturnToPool(debris.parentDebris);
+                            debrisInCurrentLevel.Remove(debris.parentDebris);
+                        }
+                        else
+                        {
+                            debris.KillByBarrier();
+                        }
+                    }
+                }
+                else
+                {
+                    pool.ReturnToPool(debris);
+                    debrisInCurrentLevel.Remove(debris);
+                }
+            }
         }
     }
 

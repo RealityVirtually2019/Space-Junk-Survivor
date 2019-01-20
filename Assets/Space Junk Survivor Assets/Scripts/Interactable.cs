@@ -6,7 +6,8 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
     public Hand attachedHand;
-    public bool partOfLargerObject;
+    public bool beenDestroyed;
+    public Interactable parentDebris;
     public bool canShatter;
     public float velocityMultiplier;
     public ParticleSystem particleSystem;
@@ -26,24 +27,54 @@ public class Interactable : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Boundary"))
         {
-            if (other.gameObject.name.Equals("Top Boundary") || other.gameObject.name.Equals("Bottom Boundary"))
+            //if (other.gameObject.name.Equals("Top Boundary") || other.gameObject.name.Equals("Bottom Boundary"))
+            //{
+            //    gameObject.SetActive(false);
+            //}
+            //else if (other.gameObject.name.Equals("Back Boundary"))
+            //{
+            //    Vector3 newPos = GameManager.instance.GetRecycleLocation(Boundary.Back, transform.position);
+            //    StartCoroutine(HoldUntilOrbited(newPos));
+            //}
+            //else if (other.gameObject.name.Equals("Left Boundary"))
+            //{
+            //    // Wait and respawn on the right
+
+            //}
+            //else if (other.gameObject.name.Equals("Right Boundary"))
+            //{
+            //    // Wait and respawn on the left
+            //}
+            Boundary boundary;
+            if (other.gameObject.name.Equals("Top Boundary"))
             {
-                gameObject.SetActive(false);
+                boundary = Boundary.Top;
+            }
+            else if (other.gameObject.name.Equals("Bottom Boundary"))
+            {
+                boundary = Boundary.Bottom;
+            }
+            else if (other.gameObject.name.Equals("Front Boundary"))
+            {
+                boundary = Boundary.Front;
             }
             else if (other.gameObject.name.Equals("Back Boundary"))
             {
-                Vector3 newPos = GameManager.instance.GetRecycleLocation(Boundary.Back, transform.position);
-                StartCoroutine(HoldUntilOrbited(newPos));
+                boundary = Boundary.Back;
             }
             else if (other.gameObject.name.Equals("Left Boundary"))
             {
-                // Wait and respawn on the right
-                
+                boundary = Boundary.Left;
             }
-            else if (other.gameObject.name.Equals("Right Boundary"))
+            //else if (other.gameObject.name.Equals("Right Boundary"))
+            //{
+            //    boundary = Boundary.Right;
+            //}
+            else
             {
-                // Wait and respawn on the left
+                boundary = Boundary.Right;
             }
+            GameManager.instance.HitBoundary(this, boundary);
         }
     }
 
@@ -62,10 +93,15 @@ public class Interactable : MonoBehaviour
         {
             particleSystem.Play();
         }
+
+        renderer.enabled = false;
+        collider.enabled = false;
+        beenDestroyed = true;
+
         if (canShatter)
         {
-            renderer.enabled = false;
-            collider.enabled = false;
+            //renderer.enabled = false;
+            //collider.enabled = false;
 
             Vector3 oldVelocity = rigidbody.velocity;
             rigidbody.velocity = Vector3.zero;
@@ -90,10 +126,17 @@ public class Interactable : MonoBehaviour
         }
         else
         {
-            renderer.enabled = false;
-            collider.enabled = false;
+            //renderer.enabled = false;
+            //collider.enabled = false;
             StartCoroutine("WaitToDeactivateGO");
         }
+    }
+
+    public void KillByBarrier()
+    {
+        renderer.enabled = false;
+        collider.enabled = false;
+        beenDestroyed = true;
     }
 
     public void Activate(Vector3 parentVelocity, Vector3 newVelocity)
