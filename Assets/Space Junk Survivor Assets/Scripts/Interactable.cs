@@ -9,6 +9,7 @@ public class Interactable : MonoBehaviour
     public bool partOfLargerObject;
     public bool canShatter;
     public float velocityMultiplier;
+    public ParticleSystem particleSystem;
     //public Vector3 currentVelocity;
     public MeshRenderer renderer;
     public Rigidbody rigidbody;
@@ -65,6 +66,10 @@ public class Interactable : MonoBehaviour
 
     public void Hit(Interactable hittingBody)
     {
+        if (particleSystem != null)
+        {
+            particleSystem.Play();
+        }
         if (canShatter)
         {
             //intact.gameObject.SetActive(false);
@@ -108,7 +113,10 @@ public class Interactable : MonoBehaviour
         }
         else
         {
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
+            renderer.enabled = false;
+            collider.enabled = false;
+            StartCoroutine("WaitToDeactivateGO");
         }
     }
 
@@ -116,8 +124,8 @@ public class Interactable : MonoBehaviour
     {
         //rigidbody.velocity = new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), -6f) - hittingBody.velocity;
         //rigidbody.velocity = -hittingBody.velocity;
-        print("Velocity of object hit was: " + parentVelocity);
-        print("Velocity of wrench was: " + newVelocity);
+        //print("Velocity of object hit was: " + parentVelocity);
+        //print("Velocity of wrench was: " + newVelocity);
         //rigidbody.velocity = parentVelocity + newVelocity;
         rigidbody.velocity = new Vector3(parentVelocity.x + (newVelocity.x * Random.Range(0.4f, 0.8f)), parentVelocity.y + (newVelocity.y * Random.Range(0.4f, 0.8f)), parentVelocity.z + velocityMultiplier);
         //rigidbody.AddForce(newVelocity);
@@ -133,5 +141,11 @@ public class Interactable : MonoBehaviour
 
         //GetComponent<BoxCollider>().enabled = true;
         collider.enabled = true;
+    }
+
+    IEnumerator WaitToDeactivateGO()
+    {
+        yield return new WaitForSeconds(0.5f);
+        gameObject.SetActive(false);
     }
 }
