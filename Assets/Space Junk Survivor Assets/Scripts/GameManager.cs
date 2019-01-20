@@ -128,11 +128,12 @@ public class GameManager : MonoBehaviour
             // Before ending level, wait for all currently spawned debris to pass player
             debrisStillSpawning = false;
 
-            while (debrisInCurrentLevel.Count > 0)
-            {
-                print(debrisInCurrentLevel.Count + " pieces of debris remaining");
-                yield return null;
-            }
+            //while (debrisInCurrentLevel.Count > 0)
+            //{
+            //    print(debrisInCurrentLevel.Count + " pieces of debris remaining");
+            //    yield return null;
+            //}
+            yield return new WaitForSeconds(15f);
 
             // Increase difficulty for next wave
             levelNumber++;
@@ -169,15 +170,24 @@ public class GameManager : MonoBehaviour
                         allChildrenDestroyed = false;
                     }
 
-                    if (allChildrenDestroyed)
-                    {
-                        pool.ReturnToPool(debris.parentDebris);
-                        debrisInCurrentLevel.Remove(debris.parentDebris);
-                    }
-                    else
-                    {
-                        debris.KillByBarrier();
-                    }
+                    //if (allChildrenDestroyed)
+                    //{
+                    //    pool.ReturnToPool(debris.parentDebris);
+                    //    debrisInCurrentLevel.Remove(debris.parentDebris);
+                    //}
+                    //else
+                    //{
+                    //    debris.KillByBarrier();
+                    //}
+                }
+                if (allChildrenDestroyed)
+                {
+                    pool.ReturnToPool(debris.parentDebris);
+                    debrisInCurrentLevel.Remove(debris.parentDebris);
+                }
+                else
+                {
+                    debris.KillByBarrier();
                 }
             }
             else
@@ -193,6 +203,8 @@ public class GameManager : MonoBehaviour
                 // Recycle to front
                 Vector3 spawnLocation = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
                 debris.transform.position = spawnLocation;
+                debris.rigidbody.velocity = Vector3.zero;
+                debris.rigidbody.angularVelocity = Vector3.zero;
                 SendDebrisAtTarget(debris);
             }
             else
@@ -206,17 +218,16 @@ public class GameManager : MonoBehaviour
                         if (debris.parentDebris.pieces[i].beenDestroyed == false)
                         {
                             allChildrenDestroyed = false;
-                        }
-
-                        if (allChildrenDestroyed)
-                        {
-                            pool.ReturnToPool(debris.parentDebris);
-                            debrisInCurrentLevel.Remove(debris.parentDebris);
-                        }
-                        else
-                        {
-                            debris.KillByBarrier();
-                        }
+                        }                        
+                    }
+                    if (allChildrenDestroyed)
+                    {
+                        pool.ReturnToPool(debris.parentDebris);
+                        debrisInCurrentLevel.Remove(debris.parentDebris);
+                    }
+                    else
+                    {
+                        debris.KillByBarrier();
                     }
                 }
                 else
@@ -227,6 +238,24 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    //public bool RegisterHit(Interactable debris)
+    //{
+    //    bool allChildrenDestroyed = true;
+    //    for (int i = 0; i < 4; i++)
+    //    {
+    //        if (debris.parentDebris.pieces[i].beenDestroyed == false)
+    //        {
+    //            allChildrenDestroyed = false;
+    //        }
+
+    //        if (allChildrenDestroyed)
+    //        {
+    //            pool.ReturnToPool(debris.parentDebris);
+    //            debrisInCurrentLevel.Remove(debris.parentDebris);
+    //        }
+    //    }
+    //}
 
     public Vector3 GetRecycleLocation(Boundary boundary, Vector3 currentLocation)
     {

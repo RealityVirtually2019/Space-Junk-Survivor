@@ -94,14 +94,16 @@ public class Interactable : MonoBehaviour
             particleSystem.Play();
         }
 
-        renderer.enabled = false;
-        collider.enabled = false;
-        beenDestroyed = true;
+        //renderer.enabled = false;
+        //collider.enabled = false;
+        //beenDestroyed = true;
 
         if (canShatter)
         {
-            //renderer.enabled = false;
-            //collider.enabled = false;
+
+            renderer.enabled = false;
+            collider.enabled = false;
+            beenDestroyed = true;
 
             Vector3 oldVelocity = rigidbody.velocity;
             rigidbody.velocity = Vector3.zero;
@@ -126,16 +128,17 @@ public class Interactable : MonoBehaviour
         }
         else
         {
-            //renderer.enabled = false;
-            //collider.enabled = false;
+            renderer.enabled = false;
+            collider.enabled = false;
             StartCoroutine("WaitToDeactivateGO");
         }
     }
 
-    public void KillByBarrier()
+    public void KillByBarrier() // Only called on small pieces
     {
         renderer.enabled = false;
         collider.enabled = false;
+        gameObject.SetActive(false);
         beenDestroyed = true;
     }
 
@@ -152,7 +155,7 @@ public class Interactable : MonoBehaviour
         collider.enabled = true;
     }
 
-    IEnumerator WaitToDeactivateGO()
+    IEnumerator WaitToDeactivateGO() // Keeps the particle system alive
     {
         yield return new WaitForSeconds(0.5f);
         gameObject.SetActive(false);
