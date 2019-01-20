@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public enum Boundary { Top, Bottom, Front, Back, Left, Right }
 
@@ -19,7 +20,7 @@ public class GameManager : MonoBehaviour
     public float defaultLevelDowntime;
 
     private bool debrisStillSpawning;
-    private bool playerIsAlive;
+    public bool playerIsAlive;
     public ObjectPool pool;
     public List<Interactable> debrisInCurrentLevel;
     public Transform junkTarget;
@@ -37,6 +38,8 @@ public class GameManager : MonoBehaviour
     private float maxY;
     private float minZ;
     private float maxZ;
+
+    public TMP_Text waveText;
 
     public Transform frontBoundary;
     public BoxCollider spawnArea;
@@ -99,6 +102,8 @@ public class GameManager : MonoBehaviour
     // TODO: Decide if we want to increase debris speed or spawning area by level
     IEnumerator RunGame()
     {
+        waveText.gameObject.SetActive(true);
+        StartCoroutine("TurnOffWaveOneText");
         //float levelTimeElapsed; // = 0f;
         float levelDuration = initialWaveTime;
         float debrisDelay = initialSpawnDelay;
@@ -141,6 +146,9 @@ public class GameManager : MonoBehaviour
             //debrisDelay -= spawnDelayDecrease;
             debrisDelay -= debrisDelay * spawnDelayDecrease;
 
+            waveText.text = "Wave: " + levelNumber;
+            waveText.gameObject.SetActive(true);
+
             // Return all debris to pool
             //foreach (Interactable debris in debrisInCurrentLevel)
             //{
@@ -152,7 +160,15 @@ public class GameManager : MonoBehaviour
 
             // Wait a few seconds before starting next level
             yield return new WaitForSeconds(defaultLevelDowntime);
+            waveText.gameObject.SetActive(false);
         }
+    }
+
+    IEnumerator TurnOffWaveOneText()
+    {
+        yield return new WaitForSeconds(defaultLevelDowntime);
+
+        waveText.gameObject.SetActive(false);
     }
 
     public void HitBoundary(Interactable debris, Boundary boundary)

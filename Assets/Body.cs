@@ -21,6 +21,7 @@ public class Body : MonoBehaviour
                 if (alive)
                 {
                     alive = false;
+                    GameManager.instance.playerIsAlive = false;
                     StartCoroutine("DisplayText");
                 }
             }
