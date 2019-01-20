@@ -69,38 +69,24 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(delayTime);
 
-        //LoadLevel();
         StartCoroutine("RunGame");
     }
 
     public void LoadLevel()
     {
-        //Vector3 spawnAreaCenter = spawnArea.transform.position;
-        //float minX = spawnAreaCenter.x - spawnArea.bounds.extents.x;
-        //float maxX = spawnAreaCenter.x + spawnArea.bounds.extents.x;
-
-        //float minY = spawnAreaCenter.y - spawnArea.bounds.extents.y;
-        //float maxY = spawnAreaCenter.y + spawnArea.bounds.extents.y;
-
-        //float minZ = spawnAreaCenter.z - spawnArea.bounds.extents.z;
-        //float maxZ = spawnAreaCenter.z + spawnArea.bounds.extents.z;
-
         Vector3 nextSpawnLocation;
         Vector3 realTargetLocation = junkTarget.position;
         Vector3 nextTargetLocation;
         for (int i = 0; i < startingJunkCount; i++)
         {
             nextSpawnLocation = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
-            //print("Spawning cube " + i + " at " + nextSpawnLocation);
             Interactable junk = pool.GetFromPool();
             junk.transform.position = nextSpawnLocation;
 
             // X and Y will vary by 0.7 in either direction
             nextTargetLocation = realTargetLocation + new Vector3(Random.Range(-junkTargetVariance, junkTargetVariance), Random.Range(-junkTargetVariance, junkTargetVariance), 0f);
-            //junk.transform.LookAt(junkTarget);
             junk.transform.LookAt(nextTargetLocation);
             junk.rigidbody.AddForce(junk.transform.forward * junkSpeed);
-            //junk.rigidbody.AddRelativeForce(transform.forward * junkSpeed);
             junk.rigidbody.angularVelocity = new Vector3(Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity));
         }
     }

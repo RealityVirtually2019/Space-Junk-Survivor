@@ -56,8 +56,8 @@ public class ObjectPool : MonoBehaviour
 
         foreach (Interactable piece in debris.pieces)
         {
-            // Enable collider and mesh of children
-            piece.collider.enabled = true;
+            // Disable collider and enable mesh of children
+            piece.collider.enabled = false; // Children debris pieces have their mesh disabled until after they've separated
             piece.renderer.enabled = true;
 
             // Turn children off
