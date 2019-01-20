@@ -15,7 +15,9 @@ public class Interactable : MonoBehaviour
     public Rigidbody rigidbody;
     public BoxCollider collider;
     //public Transform intact; // Will instance always just be the object the script is attached to?
-    public List<Transform> pieces;
+    //public List<Transform> pieces; // Why references to Transforms and not Interactables?
+    public List<Interactable> pieces;
+    public Vector3 defaultPosition;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -59,7 +61,7 @@ public class Interactable : MonoBehaviour
         yield return null;
 
         transform.position = newPos;
-        GameManager.instance.SendJunkAtTarget(this);
+        GameManager.instance.SendDebrisAtTarget(this);
         //rigidbody.velocity = savedVelocity;
         //transform.LookAt(GameManager.instance.GetJunkTarget());
     }
@@ -105,10 +107,10 @@ public class Interactable : MonoBehaviour
             }
             newVelocity *= hittingBody.velocityMultiplier;
 
-            foreach (Transform t in pieces)
+            foreach (Interactable piece in pieces)
             {
-                t.gameObject.SetActive(true);
-                t.gameObject.GetComponent<Interactable>().Activate(oldVelocity, newVelocity);
+                piece.gameObject.SetActive(true);
+                piece.Activate(oldVelocity, newVelocity);
             }
         }
         else
