@@ -45,7 +45,8 @@ public class GameManager : MonoBehaviour
     public GameObject menuUI;
     public AudioSource audioSource;
     public AudioClip menuMusic;
-    public AudioClip gameMusic;
+    public AudioClip gameMusicIntro;
+    public AudioClip gameMusicLoop;
 
     public Transform frontBoundary;
     public BoxCollider spawnArea;
@@ -114,10 +115,22 @@ public class GameManager : MonoBehaviour
             menuUI.SetActive(false);
             iss.gameObject.SetActive(false);
             audioSource.Stop();
-            audioSource.clip = gameMusic;
+            audioSource.clip = gameMusicIntro;
+            StartCoroutine("SwitchMusic");
             audioSource.Play();
             StartCoroutine("RunGame");
         }        
+    }
+
+    IEnumerator SwitchMusic()
+    {
+        yield return new WaitForSeconds(gameMusicIntro.length);
+
+        audioSource.Stop();
+
+        audioSource.clip = gameMusicLoop;
+
+        audioSource.Play();
     }
 
     // TODO: Decide if we want to increase debris speed or spawning area by level
