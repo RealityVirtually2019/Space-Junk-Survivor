@@ -8,6 +8,7 @@ public enum Boundary { Top, Bottom, Front, Back, Left, Right }
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    public bool gameStarted;
     public static List<Interactable> currentInteractables;
     private float levelNumber;
 
@@ -40,6 +41,11 @@ public class GameManager : MonoBehaviour
     private float maxZ;
 
     public TMP_Text waveText;
+    public Transform iss;
+    public GameObject menuUI;
+    public AudioSource audioSource;
+    public AudioClip menuMusic;
+    public AudioClip gameMusic;
 
     public Transform frontBoundary;
     public BoxCollider spawnArea;
@@ -61,6 +67,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator Start()
     {
         //yield return new WaitForSeconds(delayTime);
+        audioSource.Play();
 
         levelNumber = 1;
         playerIsAlive = true;
@@ -77,26 +84,40 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(delayTime);
 
-        StartCoroutine("RunGame");
+        //StartCoroutine("RunGame");
     }
 
-    public void LoadLevel()
-    {
-        Vector3 nextSpawnLocation;
-        Vector3 realTargetLocation = junkTarget.position;
-        Vector3 nextTargetLocation;
-        for (int i = 0; i < startingJunkCount; i++)
-        {
-            nextSpawnLocation = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
-            Interactable junk = pool.GetFromPool();
-            junk.transform.position = nextSpawnLocation;
+    //public void LoadLevel()
+    //{
+    //    Vector3 nextSpawnLocation;
+    //    Vector3 realTargetLocation = junkTarget.position;
+    //    Vector3 nextTargetLocation;
+    //    for (int i = 0; i < startingJunkCount; i++)
+    //    {
+    //        nextSpawnLocation = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
+    //        Interactable junk = pool.GetFromPool();
+    //        junk.transform.position = nextSpawnLocation;
 
-            // X and Y will vary by 0.7 in either direction
-            nextTargetLocation = realTargetLocation + new Vector3(Random.Range(-junkTargetVariance, junkTargetVariance), Random.Range(-junkTargetVariance, junkTargetVariance), 0f);
-            junk.transform.LookAt(nextTargetLocation);
-            junk.rigidbody.AddForce(junk.transform.forward * junkSpeed);
-            junk.rigidbody.angularVelocity = new Vector3(Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity));
-        }
+    //        // X and Y will vary by 0.7 in either direction
+    //        nextTargetLocation = realTargetLocation + new Vector3(Random.Range(-junkTargetVariance, junkTargetVariance), Random.Range(-junkTargetVariance, junkTargetVariance), 0f);
+    //        junk.transform.LookAt(nextTargetLocation);
+    //        junk.rigidbody.AddForce(junk.transform.forward * junkSpeed);
+    //        junk.rigidbody.angularVelocity = new Vector3(Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity), Random.Range(-junkRotationIntensity, junkRotationIntensity));
+    //    }
+    //}
+
+    public void PressStart()
+    {
+        if (!gameStarted)
+        {
+            gameStarted = true;
+            menuUI.SetActive(false);
+            iss.gameObject.SetActive(false);
+            audioSource.Stop();
+            audioSource.clip = gameMusic;
+            audioSource.Play();
+            StartCoroutine("RunGame");
+        }        
     }
 
     // TODO: Decide if we want to increase debris speed or spawning area by level

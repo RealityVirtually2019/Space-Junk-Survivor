@@ -76,6 +76,10 @@ public class Interactable : MonoBehaviour
             }
             GameManager.instance.HitBoundary(this, boundary);
         }
+        else if (other.gameObject.CompareTag("Start Button"))
+        {
+            GameManager.instance.PressStart();
+        }
     }
 
     IEnumerator HoldUntilOrbited(Vector3 newPos)
